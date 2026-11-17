@@ -1416,6 +1416,10 @@ html.ovl-on{overflow:hidden}
 .rating.tier-b .s{color:inherit}
 .rating.tier-c{background:var(--tint);color:var(--ink);padding:1px 9px;border-radius:999px;font-size:12px}
 .pr .rating{font-size:12px}
+.flag.b{background:color-mix(in srgb,var(--stamp) 14%,var(--surface));color:var(--stamp);font-weight:700}
+.act.book{background:var(--stamp);border-color:var(--stamp);color:var(--on-stamp)}
+.act.book.srch{background:var(--surface);color:var(--stamp);border-color:var(--stamp)}
+.act.book svg{width:15px;height:15px}
 
 </style>
 
@@ -1922,7 +1926,7 @@ SPOTS.push(
 ["tokyo","sight","Ebisu Garden Place Baccarat Chandelier",35.6421,139.7136,4.5,"Giant crystal chandelier set up for the winter season.","Usually from early November.","nt"],
 // TOKYO · places to eat
 ["tokyo","eat","Ichiran Shibuya",35.6618,139.7007,4,"Tonkotsu ramen in solo booths, open 24 hours.","","nt"],
-["tokyo","eat","Ginza Hachigou",35.6703,139.7700,4.5,"Michelin-recognized clear ramen with a French technique.","Arrive before opening.","b"],
+["tokyo","eat","Ginza Hachigou",35.6703,139.7700,4.5,"Michelin-recognized clear ramen with a French technique.","Arrive before opening.",""],
 ["tokyo","eat","Konjiki Hototogisu",35.6880,139.7114,4.5,"Clam-and-pork broth ramen once awarded a Michelin star.","",""],
 ["tokyo","eat","Ginza Kagari",35.6719,139.7631,4.5,"Creamy chicken paitan ramen in a hidden alley.","",""],
 ["tokyo","eat","Menya Musashi Shinjuku",35.6931,139.6976,4,"Iconic Shinjuku tsukemen and ramen.","",""],
@@ -3120,7 +3124,7 @@ SPOTS.push(
 ["osaka", "temple", "Nishinomiya Shrine", 34.73488, 135.33598, 4, "Head shrine of Ebisu, the god of business, famous for its January race.", "", ""],
 ["osaka", "temple", "Kiyoshikojin Seichoji", 34.821, 135.356, 4, "Hillside temple of the hearth god in Takarazuka, with a long market approach.", "", "k"],
 ["osaka", "temple", "Nakayama-dera", 34.81665, 135.37387, 4, "Big Takarazuka temple for safe childbirth, with escalators up the hill.", "", ""],
-["osaka", "temple", "Iwafune Shrine", 34.7725, 135.7015, 4, "Shrine built around giant boulders, where you crawl through a rock cave.", "Cave entry has rules and closes in rain; wear clothes that can get dirty.", "b"],
+["osaka", "temple", "Iwafune Shrine", 34.7725, 135.7015, 4, "Shrine built around giant boulders, where you crawl through a rock cave.", "Cave entry has rules and closes in rain; wear clothes that can get dirty.", ""],
 ["osaka", "museum", "Osamu Tezuka Manga Museum", 34.80718, 135.34831, 4.5, "Museum of the creator of Astro Boy, in the town where he grew up.", "", "g"],
 ["osaka", "museum", "Sakai Plaza of Rikyu and Akiko", 34.57618, 135.47065, 4, "Museum of Sen no Rikyu and poet Yosano Akiko, with a tea ceremony you can join.", "", ""],
 ["osaka", "museum", "Expo '70 Pavilion", 34.80922, 135.53562, 4, "The 1970 Expo's steel pavilion, now a museum of the fair's futuristic dreams.", "", ""],
@@ -3340,7 +3344,7 @@ SPOTS.push(
 ["tokyo", "sight", "Kuramae", 35.7029, 139.7903, 4, "Riverside district of craft workshops, coffee roasters and stationery.", "", ""],
 ["tokyo", "sight", "Toranomon Hills", 35.66796, 139.74961, 4, "New tower district with a station plaza, food halls and the TOKYO NODE gallery.", "", ""],
 ["tokyo", "sight", "Akasaka Palace", 35.68305, 139.72882, 4.5, "Japan's neo-Baroque state guest house, open to the public on many days.", "Closed Wednesdays; book a time slot online.", "b"],
-["tokyo", "sight", "National Diet Building", 35.67785, 139.74465, 4, "Japan's parliament, with free guided tours on weekdays.", "", "b"],
+["tokyo", "sight", "National Diet Building", 35.67785, 139.74465, 4, "Japan's parliament, with free guided tours on weekdays.", "", ""],
 ["tokyo", "sight", "Tokyo Big Sight", 35.63026, 139.79134, 3.5, "Convention center of inverted pyramids on the bay.", "", ""],
 ["tokyo", "shop", "Nihonbashi Mitsukoshi", 35.6852, 139.77375, 4, "Japan's first department store, with a soaring hall and celestial maiden statue.", "", ""],
 ["tokyo", "shop", "SHIBUYA109", 35.65961, 139.69887, 4, "The cylindrical tower of youth fashion at the Shibuya crossing.", "", "t"],
@@ -3476,7 +3480,7 @@ SPOTS.push(
 ["tokyo", "eat", "Sangenjaya Sankaku Chitai", 35.6436, 139.6699, 4.5, "Triangle of narrow lanes packed with tiny bars and izakaya in Sangenjaya.", "", "n"],
 ["tokyo", "eat", "Ginza Mitsukoshi food hall", 35.6714, 139.766, 4.5, "Depachika basement full of bento, wagashi and gift sweets in Ginza.", "", ""],
 ["tokyo", "eat", "Tokyu Food Show", 35.6587, 139.7015, 4.5, "Shibuya's big food hall under the station, great for takeaway dinners.", "", ""],
-["tokyo", "eat", "Hikiniku to Kome", 35.6588, 139.6969, 4.5, "Charcoal-grilled hamburg steak served piece by piece with fresh rice.", "Get a timed ticket early in the day.", "b"],
+["tokyo", "eat", "Hikiniku to Kome", 35.6588, 139.6969, 4.5, "Charcoal-grilled hamburg steak served piece by piece with fresh rice.", "Get a timed ticket early in the day.", ""],
 ["tokyo", "eat", "Onigiri Bongo", 35.73271, 139.72971, 4.5, "Tokyo's most famous rice-ball counter, with 50+ fillings.", "Lines can be long; go mid-afternoon.", "t"],
 ["tokyo", "eat", "Onigiri Asakusa Yadoroku", 35.7169, 139.79475, 4.5, "Tokyo's oldest onigiri shop, with a Michelin Bib Gourmand.", "", ""],
 ["tokyo", "eat", "Yurakucho Gado-shita", 35.6745, 139.7629, 4.5, "Yakitori and beer under the brick railway arches of Yurakucho.", "", "ng"],
@@ -3537,6 +3541,7 @@ Object.assign(ES, {"Open 24 hours a few steps from the hotel: sweets, drugstore 
 Object.assign(ES, {"Japan's biggest e-sports and digital game park, on two floors at the foot of Tokyo Tower: VR rides, racing simulators, a giant climbing game and robot fights.": "El parque de e-sports y juegos digitales más grande de Japón, en dos pisos al pie de Tokyo Tower: juegos de VR, simuladores de carreras, escalada interactiva y peleas de robots.", "Day pass ≈¥4,400–5,400, cheaper after 17:00; robot fights cost extra. Reviews are mixed: go on a weekday evening to avoid lines.": "Pase del día ≈¥4,400–5,400, más barato después de las 17:00; las peleas de robots se pagan aparte. Las reseñas son mixtas: vayan entre semana en la tarde-noche para evitar filas.", "A whole building of escape games and puzzle adventures in Kabukicho, with several games in English.": "Un edificio entero de escape rooms y juegos de acertijos en Kabukicho, con varios juegos en inglés.", "≈¥2,000–4,000 per game; book the English ones online and bring a charged phone.": "≈¥2,000–4,000 por juego; reserven en línea los que son en inglés y lleven el celular cargado.", "Team RPG adventure inside Tokyu Kabukicho Tower: pick an avatar and clear physical and puzzle quests as a party of 2–3, in English.": "Aventura tipo RPG en equipo dentro de Tokyu Kabukicho Tower: eligen avatar y superan retos físicos y de acertijos en grupos de 2 o 3, en inglés.", "≈¥2,000–2,250 per person; register online first. Groups of 2–3 only.": "≈¥2,000–2,250 por persona; regístrense en línea antes. Solo grupos de 2 o 3.", "The world's largest capsule-toy shop, with thousands of gashapon machines in Sunshine City.": "La tienda de cápsulas (gashapon) más grande del mundo, con miles de máquinas en Sunshine City.", "≈¥200–500 per capsule; change machines take ¥500 coins and bills.": "≈¥200–500 por cápsula; las máquinas de cambio aceptan monedas de ¥500 y billetes.", "Hundreds of capsule-toy machines on Akihabara's main street, from anime to miniature food.": "Cientos de máquinas de cápsulas en la calle principal de Akihabara, de anime a comida en miniatura.", "≈¥100–500 per capsule.": "≈¥100–500 por cápsula.", "Bandai Namco's active game park: race against animals, dodge balls and team challenges, at Expo City next to Expo '70 Park.": "El parque de juegos activos de Bandai Namco: carreras contra animales, quemados y retos en equipo, en Expo City junto al parque de la Expo '70.", "≈¥2,000–4,000 for 120 minutes or a day pass; free lockers.": "≈¥2,000–4,000 por 120 minutos o el pase del día; lockers gratis."});
 Object.assign(ES, {"My trip":"Mi viaje"});
 Object.assign(ES, {"stars":"estrellas","Stars are this guide's rating, shown in ranges: 4.8–5 don't miss, 4.5–4.8 very good, 4–4.5 good. They aren't Google's exact number.":"Las estrellas son la calificación de esta guía, en rangos: 4.8–5 imperdible, 4.5–4.8 muy bueno, 4–4.5 bueno. No son el número exacto de Google.","What the icons, stars, Local / Touristy and ¥ labels mean":"Qué significan los íconos, las estrellas y las etiquetas Local / Turístico y ¥"});
+Object.assign(ES, {"Reservation needed":"Requiere reserva","Book":"Reservar","Find where to book":"Buscar dónde reservar"});
 const ES_HTML = {"footer1":"Fechas del follaje: pronósticos 2026 de <a href=\"https://www.nippon.com/en/japan-data/h02888/\" target=\"_blank\" rel=\"noopener\">nippon.com</a> y <a href=\"https://www.japan-guide.com/autumn-colors/\" target=\"_blank\" rel=\"noopener\">japan-guide.com</a>. Fechas de las iluminaciones de Kioto de <a href=\"https://livejapan.com/id/in-kansai/in-pref-kyoto/in-kyoto-station_to-ji-temple/article-a2001100/\" target=\"_blank\" rel=\"noopener\">LIVE JAPAN</a>. Renovaciones según la lista de obras de japan-guide.com (actualizada el 1 oct 2026).","footer2":"Los horarios, precios y reglas de reservación cambian; confírmalos en el sitio oficial antes de ir. Mapa base: Natural Earth; contorno de Naoshima del Global Map Japan del GSI. Calles, estaciones, vías de tren y ríos: &copy; <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">colaboradores de OpenStreetMap</a>, bajo la Open Database License. Búsqueda de direcciones: OpenStreetMap Nominatim."};
 let LANG = "es"; try{ const s = localStorage.getItem("jp-lang"); if(s==="en"||s==="es") LANG = s; }catch(e){}
 const t = s => (LANG==="es" && s && ES[s]) || s;
@@ -3564,7 +3569,7 @@ const ICON = {
 ICON.u = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1.3" fill="currentColor"/><circle cx="4" cy="12" r="1.3" fill="currentColor"/><circle cx="4" cy="18" r="1.3" fill="currentColor"/></svg>';
 ICON.a = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.9 6l-.8 3.9a2.6 2.6 0 0 1-4.5 1.2L14.4 16H9.6l-2.2 2.1a2.6 2.6 0 0 1-4.5-1.2L2.1 13A5 5 0 0 1 7 7zm0 3v1.5H5.5V13H7v1.5h1.5V13H10v-1.5H8.5V10zm9.5.2a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>';
 ICON.t = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.3 1.9 3.9 4 4.2v3.2a7.6 7.6 0 0 1-4-1.3v6.4A5.6 5.6 0 1 1 11 9.9v3.3a2.4 2.4 0 1 0 2.3 2.4V3z"/></svg>';
-const FLAGS = {u:"Your list", a:"Games & arcades", t:"TikTok-famous", k:"Autumn color", n:"After dark", b:"Book ahead", g:"Good for groups"};
+const FLAGS = {u:"Your list", a:"Games & arcades", t:"TikTok-famous", k:"Autumn color", n:"After dark", b:"Reservation needed", g:"Good for groups"};
 /* places you asked for by name */
 const MY_LIST = new Set(["tokyo|Shibuya Sky","tokyo|Senso-ji","tokyo|Meiji Jingu","tokyo|Harajuku & Omotesando","tokyo|Akihabara","tokyo|Shinjuku Gyoen","tokyo|Tokyo National Museum","tokyo|Tokyo Skytree","tokyo|Asakusa Sumo Club","tokyo|Pokémon Café","osaka|teamLab Botanical Garden Osaka","osaka|Round1 Stadium Sennichimae"]);
 /* spots from the first edition that are also big on TikTok */
@@ -4540,6 +4545,16 @@ function focusHotel(id){
 /* ---------- saved / visited / directions ---------- */
 const savedLbl = () => LANG==="es" ? "Guardado" : "Saved";
 const dirURL = s => "https://www.google.com/maps/dir/?api=1&travelmode=transit&destination="+encodeURIComponent(s.name+", "+zoneById[s.zone].name+", Japan");
+const CALI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg>';
+const BOOK = {"tokyo|Ghibli Museum":"https://www.ghibli-museum.jp/en/tickets/","tokyo|teamLab Planets":"https://teamlabplanets.dmm.com/en/ticket","tokyo|teamLab Borderless":"https://www.teamlab.art/e/borderless-azabudai/","tokyo|Shibuya Sky":"https://www.shibuya-scramble-square.com/sky/ticket/","tokyo|Nezu Museum":"https://www.e-tix.jp/nezu-muse/en/","tokyo|Warner Bros. Studio Tour Tokyo":"https://www.wbstudiotour.jp/en/","tokyo|Yayoi Kusama Museum":"https://www.e-tix.jp/yayoikusamamuseum/","tokyo|Tokyo Disneyland":"https://www.tokyodisneyresort.jp/en/ticket/index.html","tokyo|Tokyo DisneySea":"https://www.tokyodisneyresort.jp/en/ticket/index.html","tokyo|Imperial Palace guided tour":"https://sankan.kunaicho.go.jp/english/guide/koukyo.html","kyoto|Sento Imperial Palace":"https://kyoto-gosho.kunaicho.go.jp/en/sento-gosho/visit","kyoto|Katsura Imperial Villa":"https://kyoto-gosho.kunaicho.go.jp/en/katsura-rikyu/visit","kyoto|Shugakuin Imperial Villa":"https://kyoto-gosho.kunaicho.go.jp/en/shugakuin-rikyu/visit","tokyo|Pokémon Café":"https://www.pokemon-cafe.jp/en/cafe/","osaka|Pokémon Café Osaka":"https://www.pokemon-cafe.jp/en/cafe/","tokyo|Fujiko F. Fujio Museum":"https://www.e-tix.jp/fujiko-museum/","osaka|Universal Studios Japan":"https://www.usj.co.jp/web/en/us","kyoto|Nintendo Museum":"https://museum.nintendo.com/en/","kyoto|Saiho-ji (Moss Temple)":"https://intosaihoji.com/en/nichinichi/","kyoto|Sagano Scenic Railway":"https://www.sagano-kanko.co.jp/en/","kyoto|Kikunoi Honten":"https://kikunoi.jp/english/","kyoto|Roan Kikunoi":"https://kikunoi.jp/english/","kanazawa|21st Century Museum of Contemporary Art":"https://www.kanazawa21.jp/data_list.php?g=120&d=1&lng=e","naoshima|Chichu Art Museum":"https://benesse-artsite.jp/en/art/chichu.html","tokyo|Akasaka Palace":"https://www.geihinkan.go.jp/en/akasaka/visit/","kyoto|Kyoto State Guest House":"https://www.geihinkan.go.jp/en/kyoto/visit/","osaka|Cup Noodles Museum Osaka Ikeda":"https://www.cupnoodles-museum.jp/reservation/osaka_ikeda/?lang=en","hiroshima|Mazda Museum":"https://www.mazda.com/en/experience/museum/reservations/","osaka|Suntory Yamazaki Distillery":"https://www.suntory.com/factory/yamazaki/","tokyo|Takarazuka Theater Tokyo":"https://kageki.hankyu.co.jp/english/","kobe|Takarazuka Revue":"https://kageki.hankyu.co.jp/english/","tokyo|Blue Note Tokyo":"https://www.bluenote.co.jp/jp/","tokyo|Billboard Live Tokyo":"https://www.billboard-live.com/tokyo/","osaka|Billboard Live Osaka":"https://www.billboard-live.com/osaka/","tokyo|Cotton Club":"https://www.cottonclubjapan.co.jp/","osaka|Tower of the Sun":"https://taiyounotou-expo70.jp/en/reserve/","osaka|Expo '70 Park & Minpaku":"https://taiyounotou-expo70.jp/en/reserve/","osaka|Church of the Light":"https://ibaraki-kasugaoka-church.jp/e-top.html","shirakawago|Overnight farmhouse stay (minshuku)":"https://shirakawa-go.gr.jp/en/faq/2/"};
+const needsBook = s => String(s.f||"").includes("b");
+function bookHTML(s){
+  if(!needsBook(s)) return "";
+  const u = BOOK[s.zone+"|"+s.name];
+  const z = zoneById[s.zone];
+  const href = u || "https://www.google.com/search?q=" + encodeURIComponent(s.name + " " + (z ? z.name : "Japan") + " reservation 予約");
+  return `<a class="act book${u?"":" srch"}" href="${esc(href)}" target="_blank" rel="noopener">${CALI}${u ? t("Book") : t("Find where to book")} ↗</a>`;
+}
 function actsHTML(s, inPopup){
   const f = FAV.has(s.key), d = DONE.has(s.key);
   return `<div class="${inPopup?"pact":"acts"}">
@@ -5076,6 +5091,7 @@ function actsFor(k, inPopup){
   const p = placeOf(k); if(!p) return "";
   const f = FAV.has(k), l = LOVE.has(k), d = DONE.has(k), ek = esc(k);
   return `<div class="${inPopup?"pact":"acts"}">
+    ${isSpot(p) ? bookHTML(p) : ""}
     <button type="button" class="act fav" data-sv data-k="${ek}" aria-pressed="${f}">${BOOKM}${svLbl(f)}</button>
     <button type="button" class="act love" data-lv data-k="${ek}" aria-pressed="${l}" aria-label="${esc(t("Favorite"))}" title="${esc(t("Favorite"))}">${HEART}${l?t("Favorite"):""}</button>
     <button type="button" class="act add" data-add data-k="${ek}">${PLUS}${t("Add to…")}</button>
