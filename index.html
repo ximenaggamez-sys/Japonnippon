@@ -1428,6 +1428,42 @@ html.ovl-on{overflow:hidden}
 .act.book.srch{background:var(--surface);color:var(--stamp);border-color:var(--stamp)}
 .act.book svg{width:15px;height:15px}
 
+
+/* day routes */
+.rt-wrap{margin-top:10px;border-top:1px dashed var(--rule);padding-top:8px}
+.rt-wrap>summary,.recs-out>summary{display:flex;gap:8px;align-items:center;cursor:pointer;list-style:none;font-size:13.5px;font-weight:700;color:var(--accent)}
+.rt-wrap>summary::-webkit-details-marker,.recs-out>summary::-webkit-details-marker,.rt>summary::-webkit-details-marker{display:none}
+.rt-wrap>summary::after,.recs-out>summary::after,.rt>summary::after{content:"▾";margin-left:auto;font-size:12px;transition:transform .15s;flex:none}
+.rt-wrap[open]>summary::after,.recs-out[open]>summary::after,.rt[open]>summary::after{transform:rotate(180deg)}
+.rt-wrap>summary svg,.recs-out>summary svg{width:16px;height:16px;flex:none}
+.rt-wrap>summary span,.recs-out>summary span{display:grid;min-width:0}
+.rt-wrap>summary small,.recs-out>summary small{font-weight:400;color:var(--muted);font-size:12px;line-height:1.35}
+.recs-out{margin-top:10px;border-top:1px dashed var(--rule);padding-top:8px}
+.recs-out>.recs-wrap{margin-top:8px;border-top:0;padding-top:0}
+.rt-body{display:grid;gap:8px;margin-top:8px}
+.rt{border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+.rt>summary{display:flex;gap:9px;align-items:center;padding:9px 10px;cursor:pointer;list-style:none}
+.rt-k{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#D8452E;color:#fff;font-weight:700;font-size:12.5px}
+.rt-st{display:grid;min-width:0;font-size:13.5px;line-height:1.35}
+.rt-st small{color:var(--muted);font-size:12px}
+.rt-in{padding:0 10px 10px}
+.rt-sec{display:flex;gap:6px;align-items:center;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);margin:8px 0 4px}
+.rt-sec svg{width:14px;height:14px}
+.rt ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rt li{display:grid;grid-template-columns:22px 24px minmax(0,1fr);gap:7px;align-items:start;font-size:13.5px}
+.rt-n{width:22px;height:22px;border-radius:50%;border:1.5px solid #D8452E;color:#D8452E;font-weight:700;font-size:11px;display:grid;place-items:center}
+.rt-ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff;background:var(--c-sight)}
+.rt-ic svg{width:14px;height:14px}
+.rt-ic.c-eat{background:var(--c-eat)}.rt-ic.c-temple{background:var(--c-temple)}.rt-ic.c-museum{background:var(--c-museum)}.rt-ic.c-garden{background:var(--c-garden)}.rt-ic.c-exp{background:var(--c-exp)}.rt-ic.c-shop{background:var(--c-shop)}.rt-ic.c-sweet{background:var(--c-sweet)}
+.rt-b{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline;min-width:0}
+.rt-b button{border:0;background:none;padding:0;font:inherit;font-weight:700;color:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.rt-m{flex-basis:100%;font-size:12px;color:var(--muted)}
+.rt-m .dh{margin-left:6px}
+.rt-plan{font-size:10.5px;font-weight:700;color:var(--accent);background:var(--tint);border-radius:999px;padding:0 7px}
+.rt-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rt-acts svg{width:14px;height:14px}
+.rt-pin{background:none;border:0}
+.rt-pin span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#D8452E;color:#fff;font:700 12px/1 var(--body);box-shadow:0 0 0 2px #fff,0 2px 6px rgb(0 0 0 / .35)}
 </style>
 
 </head>
@@ -4740,6 +4776,119 @@ function daySpot(dz, label){
   for(const s of [...spots, ...nears]){ if(!dz.includes(s.zone)) continue; const n = fold(s.name); if(n.length > 3 && f.includes(n) && (!best || n.length > fold(best.name).length)) best = s; }
   return best;
 }
+/* ---------- three walking routes per day: lots of 4.5+ places that locals and visitors both love ---------- */
+const RT_OPEN = new Set(), RT_ROPEN = new Set(), RT_CACHE = {};
+const RT_CAP = {eat:4, sweet:2, shop:3, exp:4, museum:3, temple:4, garden:3, sight:5};
+const RT_MAX = 18;
+const RT_ICON = svgI('<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7"/>');
+function rtArea(sp){
+  let a = sp.area;
+  if(!a){ const hs = SUBA[sp.zone]; if(hs){ let best = null, bd = 1e9; for(const h of hs){ const dd = km(sp.lat, sp.lng, h[1], h[2]); if(dd < bd){ bd = dd; best = h[0]; } } a = bd <= 8 ? best : "Further out"; } }
+  return sp.zone + "|" + (a || "");
+}
+function rtAreaName(k, multi){ const i = k.indexOf("|"), z = k.slice(0, i), a = k.slice(i+1), zn = t(zoneById[z].name); return !a ? zn : (multi ? zn + " · " + t(a) : t(a)); }
+function rtOpenOn(sp, iso){ if(!sp.h) return true; const p = parseH(sp.h); return p.kind !== "h" || p.grounds || !closedOn(sp, p, iso); }
+function rtNN(list, start){
+  const out = [], rest = list.slice(); let cur = start;
+  while(rest.length){ let bi = 0, bd = 1e9; rest.forEach((x, i)=>{ const dd = cur ? km(cur.lat, cur.lng, x.lat, x.lng) : i; if(dd < bd){ bd = dd; bi = i; } }); cur = rest.splice(bi, 1)[0]; out.push(cur); }
+  return out;
+}
+function dayRoutes(d){
+  if(RT_CACHE[d.d]) return RT_CACHE[d.d];
+  const zones = d.z.filter(z=>zoneById[z]); if(!zones.length) return (RT_CACHE[d.d] = []);
+  const linked = [];
+  for(const k of DAY_SLOTS) (d.en[k]||[]).forEach(x=>{ const sp = daySpot(d.z, String(x).replace(/^[★~]/,"")); if(sp && sp.kind==="spot" && !linked.includes(sp)) linked.push(sp); });
+  const planKeys = new Set(linked.map(x=>x.key));
+  const pool = spots.filter(x=>zones.includes(x.zone) && x.r >= 4.5 && x.lt !== "T" && !planKeys.has(x.key) && rtOpenOn(x, d.d));
+  const byA = new Map();
+  for(const x of pool){ const k = rtArea(x); if(k.endsWith("|Further out")) continue; if(!byA.has(k)) byA.set(k, []); byA.get(k).push(x); }
+  const cen = k => { const l = (byA.get(k)||[]).concat(linked.filter(x=>rtArea(x)===k)); const n = l.length || 1; return {lat:l.reduce((a,x)=>a+x.lat,0)/n, lng:l.reduce((a,x)=>a+x.lng,0)/n}; };
+  const used = new Set(), routes = [];
+  const pick = (areas, base) => {
+    const cand = areas.flatMap(k=>byA.get(k)||[]).sort((a,b)=>bestScore(b)-bestScore(a) || a.name.localeCompare(b.name));
+    const cnt = {}, out = base.slice();
+    for(const x of cand){ if(out.length - base.length >= RT_MAX) break; if((cnt[x.cat]||0) >= (RT_CAP[x.cat]||3)) continue; cnt[x.cat] = (cnt[x.cat]||0) + 1; out.push(x); }
+    return out;
+  };
+  const order = (stops, areas, start) => {
+    const night = stops.filter(x=>{ const sl = slotsOf(x); return sl.size === 1 && sl.has("n"); });
+    const day = stops.filter(x=>!night.includes(x));
+    let out = [], cur = start;
+    for(const k of areas){ const seg = rtNN(day.filter(x=>rtArea(x)===k && !out.includes(x)), cur); out = out.concat(seg); if(seg.length) cur = seg[seg.length-1]; }
+    const rest = day.filter(x=>!out.includes(x)); out = out.concat(rtNN(rest, cur)); if(out.length) cur = out[out.length-1];
+    return {day:out, night:rtNN(night, cur)};
+  };
+  const chain = (seed, max) => {
+    const out = [seed];
+    while(out.length < max){
+      const last = cen(out[out.length-1]); let best = null, bd = 1e9;
+      for(const k of byA.keys()){ if(out.includes(k) || used.has(k)) continue; const c = cen(k), dd = km(last.lat, last.lng, c.lat, c.lng); if(dd < bd){ bd = dd; best = k; } }
+      if(!best || bd > 3) break; out.push(best);
+    }
+    return out;
+  };
+  const planAreas = [...new Set(linked.map(rtArea))];
+  if(planAreas.length){
+    const areas = planAreas.slice(); areas.forEach(k=>used.add(k));
+    let stops = pick(areas, linked);
+    if(stops.length - linked.length < 10){ const more = chain(areas[areas.length-1], 3).slice(1); more.forEach(k=>{ used.add(k); areas.push(k); }); stops = pick(areas, linked); }
+    routes.push({plan:true, areas, planKeys, ...order(stops, areas, linked[0])});
+  }
+  const h = hotelFor(d.d), anchor = planAreas.length ? cen(planAreas[0]) : (h && zones.includes(h.zone) ? h : (byA.size ? cen([...byA.keys()][0]) : null));
+  let guard = 0;
+  while(routes.length < 3 && anchor && guard++ < 12){
+    let best = null, bs = -1e9;
+    for(const pass of [0, 1]){
+      for(const [k, l] of byA){ if(used.has(k) || l.length < 3 || (!pass && !k.startsWith(zones[0] + "|"))) continue; const c = cen(k); const sc = l.slice(0, 15).reduce((a,x)=>a+bestScore(x),0)/10 - km(anchor.lat, anchor.lng, c.lat, c.lng)*2; if(sc > bs){ bs = sc; best = k; } }
+      if(best) break;
+    }
+    if(!best) break;
+    const areas = [best]; used.add(best);
+    let stops = pick(areas, []);
+    while(stops.length < 14){ const nx = chain(areas[areas.length-1], 2)[1]; if(!nx) break; areas.push(nx); used.add(nx); stops = pick(areas, []); }
+    if(stops.length < 6) continue;
+    routes.push({plan:false, areas, planKeys:new Set(), ...order(stops, areas, h && zones.includes(h.zone) ? h : null)});
+  }
+  return (RT_CACHE[d.d] = routes);
+}
+const rtAll = r => r.day.concat(r.night);
+const rtGm = l => "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + l[0].lat + "," + l[0].lng + "&destination=" + l[l.length-1].lat + "," + l[l.length-1].lng + (l.length > 2 ? "&waypoints=" + l.slice(1, -1).map(x=>x.lat + "," + x.lng).join("%7C") : "");
+function routesBodyHTML(d){
+  const rs = dayRoutes(d);
+  if(!rs.length) return `<p class="gs-note">${T2("No routes for this day.","No hay rutas para este día.")}</p>`;
+  const multi = new Set(rs.flatMap(r=>r.areas.map(k=>k.split("|")[0]))).size > 1;
+  return rs.map((r, i)=>{
+    const all = rtAll(r), rid = d.d + "|" + i;
+    const kmT = all.reduce((a, x, j)=> j ? a + km(all[j-1].lat, all[j-1].lng, x.lat, x.lng) : 0, 0) * 1.25;
+    let n = 0;
+    const li = x => `<li><span class="rt-n">${++n}</span><span class="rt-ic c-${x.cat}">${catIc(x.cat)}</span><span class="rt-b"><button type="button" data-spot="${x.id}">${esc(x.name)}</button>${r.planKeys.has(x.key)?`<span class="rt-plan">${T2("In your plan","En tu plan")}</span>`:""}${x.lt==="L"?`<span class="ltm">${t("Local")}</span>`:""}<span class="rt-m">★ ${x.r}${prText(x)?" · " + esc(prText(x)):""} · ${esc(t(CAT[x.cat].short))}${dayHoursHTML(x, d.d)}</span></span></li>`;
+    const gm = []; for(let k = 0; k < all.length - 1; k += 9){ const ch = all.slice(k, k + 10); gm.push(`<a class="act" href="${rtGm(ch)}" target="_blank" rel="noopener">Google Maps ${k+1}–${k+ch.length} ↗</a>`); }
+    return `<details class="rt" data-rt="${rid}"${RT_ROPEN.has(rid)?" open":""}><summary><span class="rt-k">${i+1}</span><span class="rt-st"><b>${r.plan?T2("Your plan's route","La ruta de tu plan"):T2("Route","Ruta")+" "+(i+1)}: ${esc(r.areas.map(k=>rtAreaName(k, multi)).join(" → "))}</b><small>${all.length} ${T2("stops","paradas")} · ≈${kmT < 10 ? kmT.toFixed(1) : Math.round(kmT)} km ${T2("on foot or by train","a pie o en tren")}</small></span></summary>
+      <div class="rt-in">${r.day.length?`<div class="rt-sec">${SLOT_IC.a}${T2("By day","De día")}</div><ol>${r.day.map(li).join("")}</ol>`:""}${r.night.length?`<div class="rt-sec">${SLOT_IC.n}${T2("At night","De noche")}</div><ol>${r.night.map(li).join("")}</ol>`:""}
+      <div class="rt-acts"><button type="button" class="act pri" data-rtmap="${rid}">${PINI}${T2("See it on the map","Ver en el mapa")}</button>${gm.join("")}</div></div></details>`;
+  }).join("");
+}
+function routesHTML(d){
+  const open = RT_OPEN.has(d.d);
+  return `<details class="rt-wrap" data-rtday="${d.d}"${open?" open":""}><summary>${RT_ICON}<span><b>${T2("3 routes with lots to do","3 rutas con muchas cosas que hacer")}</b><small>${T2("In walking order across the day's areas; only places rated 4.5+ that locals and visitors love","En orden para recorrer las zonas del día; solo lugares de 4.5+ que encantan a locales y turistas")}</small></span></summary><div class="rt-body">${open?routesBodyHTML(d):""}</div></details>`;
+}
+let RT_LAYER = null;
+function showRoute(rid){
+  const [iso, i] = rid.split("|"), d = DAYS.find(x=>x.d===iso); if(!d) return;
+  const r = dayRoutes(d)[+i]; if(!r || !map) return;
+  const all = rtAll(r), z = all[0].zone;
+  const draw = () => {
+    if(RT_LAYER) RT_LAYER.remove();
+    RT_LAYER = L.layerGroup().addTo(map);
+    const ll = all.map(x=>[x.lat, x.lng]);
+    L.polyline(ll, {color:"#D8452E", weight:4, opacity:.9, dashArray:"7 7", interactive:false}).addTo(RT_LAYER);
+    all.forEach((x, j)=> L.marker([x.lat, x.lng], {icon:L.divIcon({className:"rt-pin", html:`<span>${j+1}</span>`, iconSize:[24,24], iconAnchor:[12,12]}), zIndexOffset:6000, keyboard:false, title:x.name}).on("click", ()=>focusSpot(x.id, false)).addTo(RT_LAYER));
+    map.fitBounds(L.latLngBounds(ll).pad(0.12), {animate:!reduced});
+  };
+  if(state.zone !== z){ setZone(z, false, true); setTimeout(draw, 450); } else draw();
+  if(!wide()) document.getElementById("mapwrap").scrollIntoView({behavior:reduced?"auto":"smooth", block:"start"});
+  toast(T2("Route on the map: follow the numbers.","Ruta en el mapa: sigan los números."), 2600);
+}
 function renderPlan(){
   const today = todayISO();
   if(!DOPEN) DOPEN = dayOpenDefault();
@@ -4758,6 +4907,7 @@ function renderPlan(){
         ${L.alt && L.alt!=="—"?`<div class="alt">${svgI('<path d="M4 12h12M12 6l6 6-6 6"/>')}<span><b>${t("Day trip instead:")}</b> ${esc(L.alt)}</span></div>`:""}
         ${h?`<div class="htl" data-hotel="${h.id}">${BED}<span>${t("Night:")} ${esc(hName(h))}</span></div>`:""}
         ${tripDayHTML(d, h)}
+        ${routesHTML(d)}
         ${recsHTML(d, L)}
         <div class="dacts">${d.z.filter(z=>zoneById[z]).map(z=>`<button type="button" class="act" data-dayguide="${z}">${PINI}${t("Open")} ${esc(t(zoneById[z].name))}</button>`).join("")}</div>
       </details></li>`;
@@ -5560,6 +5710,10 @@ contentClick = function(e){
     if(sm){ e.preventDefault(); const det = sm.parentElement, iso = det.dataset.dday; det.open = !det.open; if(!DOPEN) DOPEN = dayOpenDefault(); if(det.open) DOPEN.add(iso); else DOPEN.delete(iso); saveDopen(); return true; } }
   { const da = e.target.closest("[data-dall]");
     if(da){ DOPEN = new Set(da.dataset.dall==="1" ? DAYS.map(d=>d.d) : []); saveDopen(); content.querySelectorAll(".dday").forEach(x=>{ x.open = DOPEN.has(x.dataset.dday); }); return true; } }
+  { const rs = e.target.closest(".rt-wrap > summary"); if(rs){ const det = rs.parentElement; setTimeout(()=>{ const id = det.dataset.rtday; if(det.open){ RT_OPEN.add(id); const b = det.querySelector(".rt-body"); if(b && !b.children.length) b.innerHTML = routesBodyHTML(DAYS.find(x=>x.d===id)); } else RT_OPEN.delete(id); }, 0); return true; } }
+  { const rs = e.target.closest(".rt > summary"); if(rs){ const det = rs.parentElement; setTimeout(()=>{ if(det.open) RT_ROPEN.add(det.dataset.rt); else RT_ROPEN.delete(det.dataset.rt); }, 0); return true; } }
+  { const rm = e.target.closest("[data-rtmap]"); if(rm){ showRoute(rm.dataset.rtmap); return true; } }
+  { const ro = e.target.closest(".recs-out > summary"); if(ro){ const det = ro.parentElement; setTimeout(()=>{ const k = det.dataset.recsout + "|all"; if(det.open) RECS_OPEN.add(k); else RECS_OPEN.delete(k); }, 0); return true; } }
   if(e.target.closest(".recs > summary")){ const d = e.target.closest(".recs"); setTimeout(()=>{ if(d.open) RECS_OPEN.add(d.dataset.recs); else RECS_OPEN.delete(d.dataset.recs); }, 0); return true; }
   if(e.target.closest(".addplace > summary")){ setTimeout(()=>{ const d = content.querySelector(".addplace"); ADD_OPEN = !!(d && d.open); }, 0); return true; }
   if(e.target.closest(".gconn > summary, .tip-cat > summary, .tip-it > summary, form, input")) return true;
@@ -5654,7 +5808,7 @@ function recsHTML(d, L){
   const ex = new Set([...linked.map(s=>s.key), ...(DAYADD[d.d]||[]).map(x=>x.k)]);
   const anchors = HUBS[zones[0]] && zones.length===1 ? linked.filter(s=>s.kind==="spot") : [];
   const near = s => !anchors.length || anchors.some(a=>km(a.lat,a.lng,s.lat,s.lng) <= 2.5);
-  const pool = spots.filter(s=>zones.includes(s.zone) && !ex.has(s.key)).map(s=>({s, sl:slotsOf(s), nr:near(s)}));
+  const pool = spots.filter(s=>zones.includes(s.zone) && !ex.has(s.key) && s.r >= 4.5 && s.lt !== "T").map(s=>({s, sl:slotsOf(s), nr:near(s)}));
   const used = new Set(), bySlot = {};
   for(const sl of SLOT_ORDER){
     bySlot[sl] = {};
@@ -5681,7 +5835,7 @@ function recsHTML(d, L){
     return `<details class="recs rs-${sl}" data-recs="${id}"${RECS_OPEN.has(id)?" open":""}><summary>${SLOT_IC[sl]}<span><b>${esc(t(SLOT_LBL[sl]))}</b><small>${esc(t(SLOT_HINT[sl]))}</small></span><span class="ct">${n}</span></summary><div class="recs-in">${rows}</div></details>`;
   }).join("");
   if(!lists) return "";
-  return `<div class="recs-wrap"><div class="recs-t">${SPARK}<span>${t(anchors.length?"Best of each category near this day's plan, by time of day":"Best of each category for this day, by time of day")}</span></div>${lists}</div>`;
+  return `<details class="recs-out" data-recsout="${d.d}"${RECS_OPEN.has(d.d+"|all")?" open":""}><summary>${SPARK}<span><b>${t(anchors.length?"Best of each category near this day's plan, by time of day":"Best of each category for this day, by time of day")}</b><small>${T2("Only places rated 4.5+ by locals and visitors; tap a time of day","Solo lugares de 4.5+ para locales y turistas; toquen un momento del día")}</small></span></summary><div class="recs-wrap">${lists}</div></details>`;
 }
 
 /* ---------- places outside the guide: search, coordinates, Google Maps links, or a pin on the map ---------- */
