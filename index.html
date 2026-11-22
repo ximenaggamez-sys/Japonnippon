@@ -1464,6 +1464,20 @@ html.ovl-on{overflow:hidden}
 .rt-acts svg{width:14px;height:14px}
 .rt-pin{background:none;border:0}
 .rt-pin span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#D8452E;color:#fff;font:700 12px/1 var(--body);box-shadow:0 0 0 2px #fff,0 2px 6px rgb(0 0 0 / .35)}
+
+/* subway route */
+.rt-metro{margin-top:10px;border-color:color-mix(in srgb,#E5171F 35%,var(--rule))}
+.mt-badge{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#E5171F;color:#fff}
+.mt-badge svg{width:16px;height:16px}
+.mt-sum{font-size:13px;color:var(--muted);margin:2px 0 8px;line-height:1.45}
+.mt-st{border-top:1px solid var(--rule);padding:9px 0 4px}
+.mt-h{display:flex;gap:8px;align-items:center;font-size:14px}
+.mt-t{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);font-size:13px}
+.mt-leg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 2px;font-size:12.5px;color:var(--muted)}
+.mt-leg a{color:var(--accent);font-weight:700;text-decoration:none}
+.mchip{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--ml);color:#1B2140;font:800 10.5px/1 var(--body)}
+.mt-tip{font-size:12.5px;color:var(--muted);margin:4px 0 6px;line-height:1.45}
+.mt-st ol{margin-top:4px}
 </style>
 
 </head>
@@ -4875,8 +4889,12 @@ function routesHTML(d){
 let RT_LAYER = null;
 function showRoute(rid){
   const [iso, i] = rid.split("|"), d = DAYS.find(x=>x.d===iso); if(!d) return;
-  const r = dayRoutes(d)[+i]; if(!r || !map) return;
-  const all = rtAll(r), z = all[0].zone;
+  const r = dayRoutes(d)[+i]; if(!r) return;
+  rtDraw(rtAll(r));
+}
+function rtDraw(all){
+  if(!map || !all.length) return;
+  const z = all[0].zone;
   const draw = () => {
     if(RT_LAYER) RT_LAYER.remove();
     RT_LAYER = L.layerGroup().addTo(map);
@@ -4888,6 +4906,58 @@ function showRoute(rid){
   if(state.zone !== z){ setZone(z, false, true); setTimeout(draw, 450); } else draw();
   if(!wide()) document.getElementById("mapwrap").scrollIntoView({behavior:reduced?"auto":"smooth", block:"start"});
   toast(T2("Route on the map: follow the numbers.","Ruta en el mapa: sigan los números."), 2600);
+}
+/* ---------- subway route: every part of the city in one day ---------- */
+const MLINE = {M:["Midosuji","#E5171F"], T:["Tanimachi","#522886"], C:["Chuo","#019A66"], K:["Sakaisuji","#814721"], N:["Nagahori Tsurumi-ryokuchi","#7FA33B"]};
+const METRO = {
+ "2026-11-22": {
+  es:{t:"Ruta alternativa en metro: todas las zonas de Osaka", s:"7 zonas y 7 viajes en metro. Con el Enjoy Eco Card (pase de metro de un día: ¥620 en fin de semana, en las máquinas de cualquier estación) o con el Osaka Amazing Pass.", end:"Minoo va mañana en su plan y el Expo '70 Park queda a 40 min al norte, por eso no entran. Si hacen esta ruta, mañana pueden saltarse la bahía y llegar directo al castillo de noche."},
+  en:{t:"Alternative subway route: every part of Osaka", s:"7 areas and 7 subway rides. Use the Enjoy Eco Card (one-day subway pass: ¥620 on weekends, from the machines in any station) or the Osaka Amazing Pass.", end:"Minoo is in tomorrow's plan and Expo '70 Park is 40 min north, so they're left out. If you do this route, tomorrow you can skip the bay and go straight to the castle at night."},
+  stops:[
+   {time:"10:00", area:"Osaka Castle", line:["N"], from:"Nagahoribashi", to:"Morinomiya", min:8,
+    es:"Crucen el parque hasta la torre y salgan por el jardín Nishinomaru.", en:"Cross the park to the keep and leave through Nishinomaru Garden.",
+    places:["Osaka Castle Park","Osaka Castle","Nishinomaru Garden","Osaka Museum of History"]},
+   {time:"12:00", area:"Tenma", line:["T"], from:"Tanimachi 4-chome", to:"Minami-morimachi", min:4,
+    es:"Comida en el arcade; Harukoma suele tener fila, vayan temprano.", en:"Lunch in the arcade; Harukoma usually has a line, go early.",
+    places:["Osaka Tenmangu","Tenjinbashisuji","Harukoma Sushi"]},
+   {time:"13:45", area:"Nakanoshima & Kitahama", line:["K"], from:"Minami-morimachi", to:"Kitahama", min:2,
+    es:"O caminen 10 min hacia el sur por el río.", en:"Or walk 10 min south along the river.",
+    places:["Osaka Central Public Hall","Nakanoshima Park"]},
+   {time:"15:00", area:"Bay Area", line:["K","C"], from:"Kitahama", to:"Osakako", min:20,
+    es:"Sakaisuji a Sakaisuji-Hommachi y cambio a la Chuo. Una hora junto al mar; el acuario y la rueda están en su plan de mañana.", en:"Sakaisuji to Sakaisuji-Hommachi, then the Chuo line. An hour by the sea; the aquarium and the wheel are in tomorrow's plan.",
+    places:["Naniwa Kuishinbo Yokocho","Kaiyukan Aquarium","Tempozan Ferris Wheel"]},
+   {time:"16:30", area:"Umeda", line:["C","M"], from:"Osakako", to:"Umeda", min:25,
+    es:"Chuo a Hommachi y Midosuji a Umeda. Lleguen al Sky Building antes del atardecer (≈16:50).", en:"Chuo to Hommachi, then the Midosuji line to Umeda. Reach the Sky Building before sunset (≈16:50).",
+    places:["Umeda Sky Building","German Christmas Market Osaka","Champagne Gold Illumination in UMEKITA","Grand Front Osaka"]},
+   {time:"18:30", area:"Tennoji & Shinsekai", line:["M"], from:"Umeda", to:"Dobutsuen-mae", min:14,
+    es:"Cena de kushikatsu bajo la Tsutenkaku iluminada.", en:"Kushikatsu dinner under the lit-up Tsutenkaku.",
+    places:["Shinsekai & Tsutenkaku","Kushikatsu Daruma Shinsekai"]},
+   {time:"20:00", area:"Namba & Dotonbori", line:["M"], from:"Dobutsuen-mae", to:"Namba", min:4,
+    es:"Al final, caminen al hotel por la iluminación de Midosuji (≈15 min) o tomen la Sakaisuji de Nippombashi a Nagahoribashi (1 parada).", en:"To finish, walk back to the hotel along the Midosuji Illumination (≈15 min) or take the Sakaisuji line from Nippombashi to Nagahoribashi (1 stop).",
+    places:["Dotonbori","Glico Running Man Sign","Hozenji Yokocho","Midosuji Illumination"]}
+  ]}
+};
+const metroSpot = n => spots.find(x=>x.zone==="osaka" && x.name===n);
+const mChip = c => `<span class="mchip" style="--ml:${MLINE[c][1]}" title="${esc(MLINE[c][0])}">${c}</span>`;
+const gmTransit = (a, b) => "https://www.google.com/maps/dir/?api=1&travelmode=transit&origin=" + encodeURIComponent(a + " Station, Osaka") + "&destination=" + encodeURIComponent(b + " Station, Osaka");
+function metroHTML(d){
+  const m = METRO[d.d]; if(!m) return "";
+  const M = m[LANG] || m.en, rid = d.d + "|metro";
+  let n = 0;
+  const blocks = m.stops.map((st, i)=>{
+    const ps = st.places.map(metroSpot).filter(Boolean);
+    return `<div class="mt-st"><div class="mt-h"><span class="rt-k">${i+1}</span><span class="mt-t">${esc(st.time)}</span><b>${esc(t(st.area))}</b></div>
+      <div class="mt-leg">${st.line.map(mChip).join("")}<span>${esc(st.from)} → ${esc(st.to)} · ≈${st.min} min</span><a href="${gmTransit(st.from, st.to)}" target="_blank" rel="noopener">${T2("Directions","Cómo llegar")} ↗</a></div>
+      <p class="mt-tip">${esc(st[LANG] || st.en)}</p>
+      <ol>${ps.map(x=>`<li><span class="rt-n">${++n}</span><span class="rt-ic c-${x.cat}">${catIc(x.cat)}</span><span class="rt-b"><button type="button" data-spot="${x.id}">${esc(x.name)}</button>${x.lt==="L"?`<span class="ltm">${t("Local")}</span>`:""}<span class="rt-m">★ ${x.r}${prText(x)?" · " + esc(prText(x)):""} · ${esc(t(CAT[x.cat].short))}${dayHoursHTML(x, d.d)}</span></span></li>`).join("")}</ol></div>`;
+  }).join("");
+  return `<details class="rt rt-metro" data-rt="${rid}"${RT_ROPEN.has(rid)?" open":""}><summary><span class="mt-badge" aria-hidden="true">${svgI('<rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M8 20l-2 2M16 20l2 2M9 13h.01M15 13h.01"/>')}</span><span class="rt-st"><b>${esc(M.t)}</b><small>${m.stops.map(x=>esc(t(x.area))).join(" → ")}</small></span></summary>
+    <div class="rt-in"><p class="mt-sum">${esc(M.s)}</p>${blocks}<p class="mt-tip">${esc(M.end)}</p>
+    <div class="rt-acts"><button type="button" class="act pri" data-mtmap="${d.d}">${PINI}${T2("See it on the map","Ver en el mapa")}</button></div></div></details>`;
+}
+function showMetro(iso){
+  const m = METRO[iso]; if(!m) return;
+  rtDraw(m.stops.flatMap(st=>st.places.map(metroSpot).filter(Boolean)));
 }
 function renderPlan(){
   const today = todayISO();
@@ -4907,6 +4977,7 @@ function renderPlan(){
         ${L.alt && L.alt!=="—"?`<div class="alt">${svgI('<path d="M4 12h12M12 6l6 6-6 6"/>')}<span><b>${t("Day trip instead:")}</b> ${esc(L.alt)}</span></div>`:""}
         ${h?`<div class="htl" data-hotel="${h.id}">${BED}<span>${t("Night:")} ${esc(hName(h))}</span></div>`:""}
         ${tripDayHTML(d, h)}
+        ${metroHTML(d)}
         ${routesHTML(d)}
         ${recsHTML(d, L)}
         <div class="dacts">${d.z.filter(z=>zoneById[z]).map(z=>`<button type="button" class="act" data-dayguide="${z}">${PINI}${t("Open")} ${esc(t(zoneById[z].name))}</button>`).join("")}</div>
@@ -5713,6 +5784,7 @@ contentClick = function(e){
   { const rs = e.target.closest(".rt-wrap > summary"); if(rs){ const det = rs.parentElement; setTimeout(()=>{ const id = det.dataset.rtday; if(det.open){ RT_OPEN.add(id); const b = det.querySelector(".rt-body"); if(b && !b.children.length) b.innerHTML = routesBodyHTML(DAYS.find(x=>x.d===id)); } else RT_OPEN.delete(id); }, 0); return true; } }
   { const rs = e.target.closest(".rt > summary"); if(rs){ const det = rs.parentElement; setTimeout(()=>{ if(det.open) RT_ROPEN.add(det.dataset.rt); else RT_ROPEN.delete(det.dataset.rt); }, 0); return true; } }
   { const rm = e.target.closest("[data-rtmap]"); if(rm){ showRoute(rm.dataset.rtmap); return true; } }
+  { const mm = e.target.closest("[data-mtmap]"); if(mm){ showMetro(mm.dataset.mtmap); return true; } }
   { const ro = e.target.closest(".recs-out > summary"); if(ro){ const det = ro.parentElement; setTimeout(()=>{ const k = det.dataset.recsout + "|all"; if(det.open) RECS_OPEN.add(k); else RECS_OPEN.delete(k); }, 0); return true; } }
   if(e.target.closest(".recs > summary")){ const d = e.target.closest(".recs"); setTimeout(()=>{ if(d.open) RECS_OPEN.add(d.dataset.recs); else RECS_OPEN.delete(d.dataset.recs); }, 0); return true; }
   if(e.target.closest(".addplace > summary")){ setTimeout(()=>{ const d = content.querySelector(".addplace"); ADD_OPEN = !!(d && d.open); }, 0); return true; }
